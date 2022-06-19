@@ -1,4 +1,4 @@
-"use strict"
+"use strict";
 
 function Post() {
     return {
@@ -11,69 +11,74 @@ function Post() {
             title: "",
             body: "",
             id: "",
-            post_id: ""
+            post_id: "",
         },
 
-        init: function() {
+        init: function () {
             this.getAllPosts();
         },
 
         getAllPosts() {
-            axios.get(route('post.postList')).then(res => {
-                this.posts = res.data
-            })
+            axios.get(route("post.postList")).then((res) => {
+                this.posts = res.data;
+            });
+        },
+
+        getAllComments() {
+            axios.get(route("comment.commentList")).then((res) => {
+                this.comments = res.data;
+            });
         },
 
         getPost(id) {
-            axios.get(route('post.show', id)).then(res => {
-                this.post_single = res.data
-                this.is_single = true
-                this.form.post_id = id
-            })
+            axios.get(route("post.show", id)).then((res) => {
+                this.post_single = res.data;
+                this.is_single = true;
+                this.form.post_id = id;
+            });
         },
 
         addPost() {
-            axios.post(route('post.store'), this.form).then(res => {
-                this.is_adding = false
-                this.getAllPosts()
-                alert('Post Added Successfully!')
-                this.form = {}
-            })
+            axios.post(route("post.store"), this.form).then((res) => {
+                this.is_adding = false;
+                this.getAllPosts();
+                alert("Post Added Successfully!");
+                this.form = {};
+            });
         },
 
         editPost(id) {
-            this.form = {}
-            axios.get(route('post.edit', id)).then(res => {
-                this.form = res.data,
-                this.is_editing = true
-            })
+            this.form = {};
+            axios.get(route("post.edit", id)).then((res) => {
+                (this.form = res.data), (this.is_editing = true);
+            });
         },
 
         updatePost(id) {
-            axios.post(route('post.update', id), this.form).then(res => {
-                this.is_editing = false
-                this.getAllPosts()
-                alert('Post Updated Successfully')
-                this.form  = {}
-            })
+            axios.post(route("post.update", id), this.form).then((res) => {
+                this.is_editing = false;
+                this.getAllPosts();
+                alert("Post Updated Successfully");
+                this.form = {};
+            });
         },
 
         deletePost(id) {
             if (confirm("Are you sure you want to delete this post??")) {
-                axios.post(route('post.delete', id)).then(res => {
-                    this.is_adding = false
-                    this.getAllPosts()
-                })
+                axios.post(route("post.delete", id)).then((res) => {
+                    this.is_adding = false;
+                    this.getAllPosts();
+                });
             }
         },
 
         addComment() {
-            axios.post(route('comment.store'), this.form).then((res) => {
+            axios.post(route("comment.store"), this.form).then((res) => {
                 this.getAllPosts();
                 this.is_single = true;
-                this.getPost(this.form.post_id)
+                this.getPost(this.form.post_id);
                 alert("Comment added Successfully");
-                this.form =  {};
+                this.form = {};
             });
         },
 
@@ -87,9 +92,9 @@ function Post() {
         },
 
         Adding() {
-            this.is_editing = false
-            this.is_adding = true
-            this.form = {}
-        }
-    }
+            this.is_editing = false;
+            this.is_adding = true;
+            this.form = {};
+        },
+    };
 }

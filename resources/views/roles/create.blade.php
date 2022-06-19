@@ -13,6 +13,14 @@
                                 <label class="form-label" for="name">Name</label>
                                 <input class="form-control" type="text" name="name" id="name" value="{{ old('name') }}" />
                             </div>
+                            <div class="mb-3">
+                                @foreach ($permissions as $permission)
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="{{ $permission->name }}" name="permissions[]" value="{{ old('permissions', $permission->id) }}" />
+                                        <label class="form-check-label" for="{{ $permission->name }}">{{ $permission->name }}</label>
+                                    </div>
+                                @endforeach
+                            </div>
                             <div>
                                 <button class="btn btn-primary" type="submit">Save</button>
                             </div>

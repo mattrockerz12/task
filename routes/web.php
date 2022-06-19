@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,16 +20,17 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('welcome');
 
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
+//'middleware' => ['auth', 'role:admin'],
+
 Route::group([
     'as' => 'post.',
     'prefix' => 'posts',
-    'middleware' => ['auth', 'role:admin'],
 ], function () {
     Route::get('/', [PostController::class, 'index'])->name('index');
     Route::get('/postList', [PostController::class, 'postList'])->name('postList');
@@ -57,6 +59,7 @@ Route::group([
     'as' => 'comment.',
     'prefix' => 'comments',
 ], function () {
+    Route::get('/commentList', [CommentController::class, 'commentList'])->name('commentList');
     Route::post('/store', [CommentController::class, 'store'])->name('store');
 });
 
@@ -70,4 +73,13 @@ Route::group([
     Route::get('/{id}/edit', [PermissionController::class, 'edit'])->name('edit');
     Route::post('/{id}/update', [PermissionController::class, 'update'])->name('update');
     Route::post('/{id}/delete', [PermissionController::class, 'delete'])->name('delete');
+});
+
+Route::group([
+    'as' => 'user.',
+    'prefix' => 'users'
+], function () {
+    Route::get('/users', [UserController::class, 'index'])->name('index');
+    Route::get('/create', [UserController::class, 'create'])->name('create');
+    Route::get('/{id}/edit', [UserController::class, 'edit'])->name('edit');
 });

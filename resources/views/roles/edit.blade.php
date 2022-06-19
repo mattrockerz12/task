@@ -13,30 +13,18 @@
                                 <label class="form-label" for="name">Name</label>
                                 <input class="form-control" type="text" name="name" id="name" value="{{ $role->name }}" />
                             </div>
+                            <div class="mb-3">
+                                @foreach ($permissions as $permission)
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="{{ $permission->name }}" name="permissions[]" value="{{ old('permissions', $permission->id) }}" {{ in_array($permission->id, $permissionCollection) ? 'checked' : ''}} />
+                                        <label class="form-check-label" for="{{ $permission->name }}">{{ $permission->name }}</label>
+                                    </div>
+                                @endforeach
+                            </div>
                             <div>
                                 <button class="btn btn-primary" type="submit">Save</button>
                             </div>
                         </form>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-body">
-                        <div class="card-body">
-                            <form action="{{ route('role.givePermission', $role->id) }}" method="post">
-                                @csrf
-                                <div class="mb-3">
-                                    <label class="form-label" for="permission">Permissions</label>
-                                    <select class="form-select" id="permission" name="permission" aria-label="Default select example">
-                                        @foreach ($permissions as $permission)
-                                            <option value="{{ $permission->name }}">{{ $permission->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div>
-                                    <button class="btn btn-primary" type="submit">Assign</button>
-                                </div>
-                            </form>
-                        </div>
                     </div>
                 </div>
             </div>

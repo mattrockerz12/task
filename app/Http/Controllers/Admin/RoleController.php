@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,16 +20,21 @@ class RoleController extends Controller
 
     public function create()
     {
-        return view('roles.create');
+        $permissions = Permission::all();
+
+        return view('roles.create', compact('permissions'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required'
+            'name' => 'required',
+            'permissions' => 'required_without_all'
         ]);
 
-        Role::create($request->only('name'));
+        $roles = Role::create($request->only('name'));
+
+        $roles->syncPermissions([$request->permissions]);
 
         return redirect()->route('role.index');
     }
@@ -36,21 +42,26 @@ class RoleController extends Controller
     public function edit($id)
     {
         $permissions = Permission::all();
-
+        $permissionCollection = DB::table("role_has_permissions")->where("role_has_permissions.role_id", $id)
+        ->pluck('role_has_permissions.permission_id','role_has_permissions.permission_id')
+        ->all();
         $role = Role::findOrFail($id);
 
-        return view('roles.edit', compact('role', 'permissions'));
+        return view('roles.edit', compact('role', 'permissions', 'permissionCollection'));
     }
 
     public function update(Request $request, $id)
     {
         $request->validate([
-            'name' => 'required'
+            'name' => 'required',
+            'permissions' => 'required_without_all'
         ]);
 
         $role = Role::findOrFail($id);
 
         $role->update($request->only('name'));
+
+        $role->syncPermissions($request->permissions);
 
         return redirect()->route('role.index');
     }
@@ -72,4 +83,6 @@ class RoleController extends Controller
         $role->givePermissionTo($request->permission);
         return back()->with('message', 'Permission added');
     }
+
+
 }
