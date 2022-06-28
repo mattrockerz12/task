@@ -13,7 +13,7 @@
                                     <h3 class="mb-0" x-text='post.title'></h3>
                                     <div class="mb-1 text-muted" x-text='post.created_at'></div>
                                     <p class="card-text mb-auto" x-text='post.body'></p>
-                                    <h4>Posted by: <span x-text='post.user.firstname'></span></h4>
+                                    <h4>Posted by: <span x-text="post.user.firstname + ' ' + post.user.middlename + ' ' + post.user.lastname"></span></h4>
                                     <a x-on:click="getPost(post.id)"  class="stretched-link">Continue reading</a>
                                 </div>
                             </div>
@@ -26,23 +26,23 @@
                     <div>
                         <div class='card'>
                             <div class='card-body'>
-                                <a x-on:click="is_single = !is_single" href="javascript:void(0)" class="btn btn-primary btn-sm">Back</a>
+                                <a x-on:click="is_single = !is_single" href="javascript:void(0)" class="btn btn-primary btn-sm mb-2">Back</a>
                                 <h4>Display Comments</h4>
                                 <hr />
                                 <template x-for='comment in post_single.comments' :key='comment.id'>
                                         <div>
-                                            <strong x-text='comment.user'></strong>
+                                            <strong x-text="comment.user.firstname + ' ' + comment.user.lastname "></strong>
                                             <p x-text='comment.body'></p>
                                         </div>
                                 </template>
                                 <h4>Add comment</h4>
                                 <form @submit.prevent="addComment">
                                     @csrf
-                                    <div class="form-group">
+                                    <div class="mb-3">
                                         <textarea class="form-control" name="body" x-model="form.body"></textarea>
                                         <input type="hidden" x-model='form.post_id'  />
                                     </div>
-                                    <div class="form-group">
+                                    <div class="mb-3">
                                         <input type="submit" class="btn btn-primary" value="Add Comment" />
                                     </div>
                                 </form>

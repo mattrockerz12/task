@@ -25,7 +25,7 @@
                                         <td>
                                             <div class="btn-group">
                                                 <a class="btn btn-primary" href="{{ route('user.edit', $user->id) }}">Edit</a>
-                                                <form>
+                                                <form action="{{ route('user.delete', $user->id) }}" method="post">
                                                     @csrf
                                                     <button class="btn btn-danger" type='submit'>Delete</button>
                                                 </form>

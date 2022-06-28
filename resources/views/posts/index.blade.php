@@ -40,7 +40,7 @@
                 </template>
                 <template x-if="is_adding">
                     <div class="card-body">
-                        <a x-on:click="is_adding = !is_adding" href="javascript:void(0)" class="btn btn-primary">Back</a>
+                        <a x-on:click="is_adding = !is_adding" href="javascript:void(0)" class="btn btn-primary mb-2">Back</a>
                         <form x-on:submit.prevent="addPost">
                             @csrf
                             <div class="mb-3">

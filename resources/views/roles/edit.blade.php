@@ -6,7 +6,7 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-body">
-                        <a class="btn btn-primary btn-sm" href="{{ route('role.index') }}">Back</a>
+                        <a class="btn btn-primary btn-sm mb-2" href="{{ route('role.index') }}">Back</a>
                         <form action="{{ route('role.update', $role->id) }}" method="post">
                             @csrf
                             <div class="mb-3">

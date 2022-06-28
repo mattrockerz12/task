@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
-})->name('welcome');
+})->name('welcome')->middleware('auth');
 
 Auth::routes();
 
@@ -45,13 +45,14 @@ Route::group([
 Route::group([
     'as' => 'role.',
     'prefix' => 'roles',
+    'middleware' => 'auth'
 ], function() {
-    Route::get('/', [RoleController::class, 'index'])->name('index');
-    Route::get('/create', [RoleController::class, 'create'])->name('create');
-    Route::post('/store', [RoleController::class, 'store'])->name('store');
-    Route::get('/{id}/edit', [RoleController::class, 'edit'])->name('edit');
-    Route::post('/{id}/update', [RoleController::class, 'update'])->name('update');
-    Route::post('/{id}/delete', [RoleController::class, 'delete'])->name('delete');
+    Route::get('/', [RoleController::class, 'index'])->middleware(['can:role-list'])->name('index');
+    Route::get('/create', [RoleController::class, 'create'])->middleware(['can:role-create'])->name('create');
+    Route::post('/store', [RoleController::class, 'store'])->middleware(['can:role-create'])->name('store');
+    Route::get('/{id}/edit', [RoleController::class, 'edit'])->middleware(['can:role-edit'])->name('edit');
+    Route::post('/{id}/update', [RoleController::class, 'update'])->middleware(['can:role-edit'])->name('update');
+    Route::post('/{id}/delete', [RoleController::class, 'delete'])->middleware(['can:role-delete'])->name('delete');
     Route::post('/{role}/givePermission', [RoleController::class, 'givePermission'])->name('givePermission');
 });
 
@@ -66,20 +67,25 @@ Route::group([
 Route::group([
     'as' => 'permission.',
     'prefix' => 'permissions',
+    'middleware' => 'auth'
 ], function () {
-    Route::get('/', [PermissionController::class, 'index'])->name('index');
-    Route::get('/create', [PermissionController::class, 'create'])->name('create');
-    Route::post('/store', [PermissionController::class, 'store'])->name('store');
-    Route::get('/{id}/edit', [PermissionController::class, 'edit'])->name('edit');
-    Route::post('/{id}/update', [PermissionController::class, 'update'])->name('update');
-    Route::post('/{id}/delete', [PermissionController::class, 'delete'])->name('delete');
+    Route::get('/', [PermissionController::class, 'index'])->middleware(['can:permission-list'])->name('index');
+    Route::get('/create', [PermissionController::class, 'create'])->middleware(['can:permission-create'])->name('create');
+    Route::post('/store', [PermissionController::class, 'store'])->middleware(['can:permission-create'])->name('store');
+    Route::get('/{id}/edit', [PermissionController::class, 'edit'])->middleware(['can:permission-edit'])->name('edit');
+    Route::post('/{id}/update', [PermissionController::class, 'update'])->middleware(['can:permission-edit'])->name('update');
+    Route::post('/{id}/delete', [PermissionController::class, 'delete'])->middleware(['can:permission-delete'])->name('delete');
 });
 
 Route::group([
     'as' => 'user.',
-    'prefix' => 'users'
+    'prefix' => 'users',
+    'middleware' => 'auth'
 ], function () {
-    Route::get('/users', [UserController::class, 'index'])->name('index');
-    Route::get('/create', [UserController::class, 'create'])->name('create');
-    Route::get('/{id}/edit', [UserController::class, 'edit'])->name('edit');
+    Route::get('/', [UserController::class, 'index'])->middleware(['can:user-list'])->name('index');
+    Route::get('/create', [UserController::class, 'create'])->middleware(['can:user-create'])->name('create');
+    Route::post('/store', [UserController::class, 'store'])->middleware(['can:user-create'])->name('store');
+    Route::get('/{id}/edit', [UserController::class, 'edit'])->middleware('can:user-edit')->name('edit');
+    Route::post('/{id}/update', [UserController::class, 'update'])->middleware(['can:user-edit'])->name('update');
+    Route::post('/{id}/delete', [UserController::class, 'delete'])->middleware(['can:user-delete'])->name('delete');
 });

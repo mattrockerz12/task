@@ -7,7 +7,7 @@
             <div class="card">
                 <div class="card-header">Manage Posts</div>
                 <div class="card-body">
-                    <a href="{{ route('post.index') }}" class="btn btn-primary">Back</a>
+                    <a href="{{ route('post.index') }}" class="btn btn-primary mb-2">Back</a>
                     <form action="{{ route('post.store') }}" method="post">
                         @csrf
                         <div class="mb-3">
